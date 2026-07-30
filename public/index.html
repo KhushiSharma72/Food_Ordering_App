@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BiteDash | Delicious Food Ordering</title>
+  <!-- Google Fonts for modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🍔</span>
+        <span class="logo-text">Bite<span class="highlight">Dash</span></span>
+      </a>
+
+      <!-- Search Input -->
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Search delicious food..." onkeyup="filterMenu()">
+      </div>
+
+      <!-- Nav Links & Cart Action -->
+      <div class="nav-actions">
+        <a href="orders.html" class="nav-link admin-btn">
+          <span class="icon">📋</span> Admin Dashboard
+        </a>
+        <button id="cart-toggle-btn" class="cart-badge-btn" onclick="toggleCart(true)">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-label">Cart</span>
+          <span id="cart-count" class="badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Hot, Fresh & Delicious Food <br><span class="gradient-text">Delivered to Your Door</span></h1>
+      <p>Explore our handcrafted menu of mouthwatering pizzas, juicy burgers, refreshing drinks, and decadent desserts.</p>
+    </div>
+  </section>
+
+  <!-- Main Application Container -->
+  <main class="main-container">
+    
+    <!-- Category Filter Tabs -->
+    <div class="category-tabs" id="category-tabs">
+      <button class="tab-btn active" data-category="All" onclick="filterCategory('All')">✨ All Items</button>
+      <button class="tab-btn" data-category="Burgers" onclick="filterCategory('Burgers')">🍔 Burgers</button>
+      <button class="tab-btn" data-category="Pizza" onclick="filterCategory('Pizza')">🍕 Pizza</button>
+      <button class="tab-btn" data-category="Drinks" onclick="filterCategory('Drinks')">🥤 Drinks</button>
+      <button class="tab-btn" data-category="Desserts" onclick="filterCategory('Desserts')">🍰 Desserts</button>
+    </div>
+
+    <!-- Loading Indicator & Error Container -->
+    <div id="status-message" class="status-message"></div>
+
+    <!-- Food Menu Items Grid -->
+    <section class="menu-grid" id="menu-grid">
+      <!-- Menu cards will be rendered dynamically by script.js -->
+    </section>
+  </main>
+
+  <!-- Sliding Cart Overlay / Drawer -->
+  <div id="cart-overlay" class="cart-overlay" onclick="toggleCart(false)"></div>
+  <aside id="cart-drawer" class="cart-drawer">
+    <div class="cart-header">
+      <h2><span class="icon">🛒</span> Your Order Cart</h2>
+      <button class="close-btn" onclick="toggleCart(false)">&times;</button>
+    </div>
+
+    <!-- Cart items list -->
+    <div id="cart-items-container" class="cart-items">
+      <!-- Cart items rendered dynamically -->
+    </div>
+
+    <!-- Cart Footer & Total Calculation -->
+    <div class="cart-footer">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="cart-subtotal">$0.00</span>
+      </div>
+      <div class="summary-row">
+        <span>Delivery Fee</span>
+        <span id="cart-delivery-fee" class="free-text">FREE</span>
+      </div>
+      <div class="summary-row total-row">
+        <span>Total Amount</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+
+      <button id="checkout-btn" class="primary-btn checkout-btn" onclick="openCheckoutModal()" disabled>
+        Proceed to Checkout →
+      </button>
+    </div>
+  </aside>
+
+  <!-- Checkout Form Modal -->
+  <div id="checkout-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><span class="icon">📦</span> Delivery Details</h2>
+        <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
+      </div>
+
+      <form id="checkout-form" onsubmit="handlePlaceOrder(event)">
+        <div class="form-group">
+          <label for="customerName">Full Name *</label>
+          <input type="text" id="customerName" placeholder="e.g. Sarah Jenkins" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number *</label>
+          <input type="tel" id="phone" placeholder="e.g. (555) 019-2834" required>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Delivery Address *</label>
+          <textarea id="address" rows="3" placeholder="e.g. 742 Evergreen Terrace, Apt 4B, Springfield" required></textarea>
+        </div>
+
+        <!-- Order Breakdown -->
+        <div class="order-summary-box">
+          <h4>Order Summary (<span id="modal-item-count">0</span> items)</h4>
+          <div id="modal-items-list" class="modal-items-list"></div>
+          <div class="modal-total">
+            <span>Total Payable:</span>
+            <strong id="modal-total-price">$0.00</strong>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" onclick="closeCheckoutModal()">Cancel</button>
+          <button type="submit" id="submit-order-btn" class="primary-btn">
+            <span class="btn-text">Confirm & Place Order</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order Confirmation Modal -->
+  <div id="success-modal" class="modal">
+    <div class="modal-content success-card">
+      <div class="success-icon">🎉</div>
+      <h2>Order Placed Successfully!</h2>
+      <p>Thank you for your order. Our kitchen is preparing your delicious meal right now!</p>
+      <div class="order-id-badge">
+        <span>Order Reference:</span>
+        <strong id="success-order-id">#000000</strong>
+      </div>
+      <button class="primary-btn" onclick="closeSuccessModal()">Back to Menu</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Application Script -->
+  <script src="script.js"></script>
+</body>
+</html>

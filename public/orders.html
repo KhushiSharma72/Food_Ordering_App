@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | BiteDash Orders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🍔</span>
+        <span class="logo-text">Bite<span class="highlight">Dash</span> <span class="badge-admin">Admin</span></span>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="nav-link">
+          <span class="icon">🍔</span> Customer Menu
+        </a>
+        <button onclick="fetchAdminOrders()" class="secondary-btn refresh-btn">
+          <span class="icon">🔄</span> Refresh Orders
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Admin Main Dashboard Content -->
+  <main class="main-container admin-container">
+    
+    <div class="dashboard-header">
+      <div>
+        <h1>Order Management Dashboard</h1>
+        <p>Monitor customer orders, track sales performance, and update delivery statuses in real-time.</p>
+      </div>
+    </div>
+
+    <!-- Metrics Cards -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon blue">📦</div>
+        <div class="metric-info">
+          <h3>Total Orders</h3>
+          <p id="metric-total-orders">0</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon green">💰</div>
+        <div class="metric-info">
+          <h3>Total Revenue</h3>
+          <p id="metric-total-revenue">$0.00</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon orange">⏳</div>
+        <div class="metric-info">
+          <h3>Pending Orders</h3>
+          <p id="metric-pending-orders">0</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon purple">✅</div>
+        <div class="metric-info">
+          <h3>Completed</h3>
+          <p id="metric-completed-orders">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter & Control Bar -->
+    <div class="admin-controls">
+      <div class="filter-group">
+        <label for="status-filter">Filter Status:</label>
+        <select id="status-filter" onchange="filterAdminOrders()">
+          <option value="all">All Orders</option>
+          <option value="pending">Pending</option>
+          <option value="preparing">Preparing</option>
+          <option value="out for delivery">Out for Delivery</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <div class="search-box admin-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="admin-search-input" placeholder="Search by customer name or phone..." onkeyup="filterAdminOrders()">
+      </div>
+    </div>
+
+    <!-- Status Message -->
+    <div id="admin-status-message" class="status-message"></div>
+
+    <!-- Orders Cards Container -->
+    <div id="orders-list-container" class="orders-grid">
+      <!-- Orders loaded dynamically by script.js -->
+    </div>
+
+  </main>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="script.js"></script>
+  <script>
+    // Initialize admin view on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchAdminOrders();
+    });
+  </script>
+</body>
+</html>
