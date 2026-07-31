@@ -119,7 +119,19 @@ You should see logs indicating:
 
 ---
 
-## 📡 REST API Endpoints Overview
+## �️ Screenshots
+
+Below are the main app views shown in this project:
+
+![Customer Menu](screenshots/customer-menu.png)
+
+![Admin Dashboard](screenshots/admin-dashboard.png)
+
+![Cart View](screenshots/cart-view.png)
+
+> Add the matching image files to the `screenshots/` folder before publishing on GitHub.
+
+## �📡 REST API Endpoints Overview
 
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
